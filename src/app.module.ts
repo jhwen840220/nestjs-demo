@@ -11,6 +11,7 @@ import { MulterModule } from '@nestjs/platform-express';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { diskStorage } from 'multer';
 import { Agent } from 'https';
+import { Connection } from 'typeorm';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -25,7 +26,6 @@ import { ConfigurationModule } from './common/configuration/configuration.module
 import configurationFactory from './config/configuration.factory';
 import { MulterHelper } from './core/helpers/multer.helper';
 
-import { UserEntity } from './features/user/entitiy/user.entity';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -34,16 +34,7 @@ import { UserEntity } from './features/user/entitiy/user.entity';
       load: [configurationFactory],
       isGlobal: true,
     }),
-    TypeOrmModule.forRoot({
-      type: 'mysql',
-      host: 'localhost',
-      port: 3306,
-      username: 'admin',
-      password: 'test',
-      database: 'test',
-      entities: [UserEntity],
-      synchronize: true,
-    }),
+    TypeOrmModule.forRoot(),
     HttpModule.registerAsync({
       imports: [ConfigModule],
       useFactory: (config: ConfigService) => ({
@@ -68,6 +59,8 @@ import { UserEntity } from './features/user/entitiy/user.entity';
   providers: [AppService],
 })
 export class AppModule implements NestModule, OnModuleInit {
+  constructor(private connection: Connection) {}
+
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(LoggerMiddleware)
