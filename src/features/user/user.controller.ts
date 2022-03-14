@@ -6,24 +6,15 @@ import {
   Get,
   Delete,
   Param,
+  HttpException,
+  HttpStatus,
+  UseGuards,
 } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { UserService } from './user.service';
-import { CreateUserDto } from './dto/create-user.dto';
 @Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
-
-  @Post()
-  // @UsePipes(
-  //   new ValidationPipe({
-  //     exceptionFactory: (errors: ValidationError[]) => {
-  //       return new NotAcceptableException('格式錯誤');
-  //     },
-  //   }),
-  // )
-  create(@Body() dto: CreateUserDto) {
-    return this.userService.create(dto);
-  }
 
   @Get()
   findAll() {
@@ -33,5 +24,13 @@ export class UserController {
   @Delete(':id')
   delete(@Param('id') id: string) {
     this.userService.remove(id);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Get(':id')
+  async getUser(@Param('id') id: number) {
+    const user = await this.userService.findOneById(id);
+    const { password, ...result } = user;
+    return result;
   }
 }

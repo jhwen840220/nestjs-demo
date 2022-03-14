@@ -1,15 +1,15 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { CopyTodoController } from './copy-todo.controller';
+import { ContactController } from './contact.controller';
 
-describe('CopyTodoController', () => {
-  let controller: CopyTodoController;
+describe('ContactController', () => {
+  let controller: ContactController;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [CopyTodoController],
+      controllers: [ContactController],
     }).compile();
 
-    controller = module.get<CopyTodoController>(CopyTodoController);
+    controller = module.get<ContactController>(ContactController);
   });
 
   it('should be defined', () => {

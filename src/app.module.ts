@@ -15,23 +15,22 @@ import { Connection } from 'typeorm';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { TodoModule } from './features/todo/todo.module';
-import { CopyTodoModule } from './features/copy-todo/copy-todo.module';
 import { CommonModule } from './features/common/common.module';
 import { UserModule } from './features/user/user.module';
 
 import { LoggerMiddleware } from './middlewares/logger.middleware';
 import { ConfigurationModule } from './common/configuration/configuration.module';
-
-import configurationFactory from './config/configuration.factory';
+import SecretConfigFactory from './config/secret.config';
 import { MulterHelper } from './core/helpers/multer.helper';
+import { AuthModule } from './features/auth/auth.module';
+import { ContactModule } from './features/contact/contact.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       envFilePath: 'development.env',
       expandVariables: true, // 開啟環境變數檔變數嵌入功能
-      load: [configurationFactory],
+      load: [SecretConfigFactory],
       isGlobal: true,
     }),
     TypeOrmModule.forRoot(),
@@ -49,11 +48,11 @@ import { MulterHelper } from './core/helpers/multer.helper';
         filename: MulterHelper.filenameHandler,
       }),
     }),
-    TodoModule,
-    CopyTodoModule,
     CommonModule,
     ConfigurationModule,
     UserModule,
+    AuthModule,
+    ContactModule,
   ],
   controllers: [AppController],
   providers: [AppService],

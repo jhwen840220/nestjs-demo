@@ -31,16 +31,6 @@ export class AppController {
     return this.appService.getTodos();
   }
 
-  @Get()
-  getHello() {
-    const username = this.configService.get('USERNAME');
-    const port = this.configService.get('PORT');
-    const db_host = this.configService.get('database.host');
-    const app_domain = this.configService.get('APP_DOMAIN');
-    const redirect_url = this.configService.get('APP_REDIRECT_URL');
-    return { username, port, db_host, app_domain, redirect_url };
-  }
-
   @Post('/single')
   @UseInterceptors(FileInterceptor('file'))
   uploadSingleFile(@UploadedFile() file: Express.Multer.File) {

@@ -6,16 +6,12 @@ import {
   MaxLength,
 } from 'class-validator';
 
-export class CreateUserDto {
-  @IsString()
-  @IsNotEmpty()
-  public readonly username: string;
-
-  @IsString()
-  @IsNotEmpty()
-  public readonly password: string;
-
+export class CreateContactDto {
   @IsString()
   @IsNotEmpty()
   public readonly name: string;
+
+  @IsString()
+  @IsNotEmpty()
+  public readonly phone: string;
 }
